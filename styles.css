@@ -1,0 +1,234 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0.2rem;
+    padding: 0 2rem;
+    color: rgb(7, 7, 7);
+    background-color: rgb(255, 255, 255);
+    font-family: 'Calibri', sans-serif;
+}
+
+.big-title {
+    font-size: 4.1rem;
+    text-shadow: 2px 2px 4px rgba(197, 12, 235, 0.1);
+    font-family: 'Courier New', Courier, monospace; 
+    margin-top: 6rem;
+    text-align: center;
+}
+
+.big-subtitle {
+    font-size: 1.5rem;
+    font-family: 'Courier New', Courier, monospace;
+    text-shadow: 2px 2px 4px rgba(197, 12, 235, 0.1);
+    margin: 1rem 0 6rem;
+    text-align: center;
+}
+
+.post-title {
+    font-size: 2.5rem;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: rgb(77, 6, 147);
+    color: white;
+    display: inline;
+    padding: 0.2em 0.5em;
+    margin: 3rem 0 5rem;
+}
+
+.astro-status {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    background-color: rgb(7, 95, 209); 
+    color: rgb(124, 235, 157);
+    display: inline;
+    padding: 0.2em 0.5em;
+    margin: -3rem 0 8rem;
+}
+
+.meanwhile-title {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.3rem;
+    background-color: rgb(7, 95, 209); 
+    color: rgb(7, 224, 72);
+    display: inline-block;
+    padding: 0.2em 0.5em;
+    margin: 4rem 0 1rem;
+}
+
+.post-text {
+    margin: 2rem 0 1rem;
+}
+
+/* Links */
+a {
+    color: rgb(7, 224, 72);
+    text-decoration: none;
+}
+
+a:hover {
+    background-color: rgb(148, 97, 199);
+    color: white;
+    transform: translateX(5px);
+}
+
+/* Text Colors */
+.red-text {
+    color: rgb(243, 38, 38);
+    margin: 2rem 0 1rem;
+}
+
+.orange-text {
+    color: rgb(231, 85, 7);
+}
+
+.blue-text {
+    color: rgb(23, 195, 238) !important;
+}
+
+/* Layout */
+.center-stuff {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.left-stuff {
+    display: flex;
+    justify-content: left;
+}
+
+.two-column {
+    display: flex;
+    margin: 3rem auto;
+    align-items: flex-start;
+    max-width: 1200px;
+    padding: 0 1rem;
+    gap: 1rem;
+}
+
+/* Image Styles */
+img {
+    margin: 2rem 0;
+}
+
+.center-stuff img {
+    display: block;
+    margin: 2rem auto;
+    max-width: 100%;
+}
+
+.image-row {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.image-row img {
+    width: auto;
+    object-fit: cover;
+}
+
+/* Image Height Classes */
+.image-10 { height: 10vh; width: auto; }
+.image-15 { height: 15vh; width: auto; }
+.image-20 { height: 20vh; width: auto; }
+.image-25 { height: 25vh; width: auto; }
+.image-30 { height: 30vh; width: auto; }
+.image-35 { height: 35vh; width: auto; }
+.image-40 { height: 40vh; width: auto; }
+.image-45 { height: 45vh; width: auto; }
+.image-50 { height: 50vh; width: auto; }
+.image-55 { height: 55vh; width: auto; }
+
+/* Column Layouts */
+.text-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100%;
+    padding: 20px;
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+}
+
+.text-column .post-text {
+    text-align: center;
+    width: 100%;
+    margin: auto;
+}
+
+.text-column[style*="justify-content: left"] .post-text {
+    text-align: left;
+}
+
+.text-column h4.post-text a {
+    display: inline-block;
+    margin: 0.2rem 0;
+}
+
+.image-column {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 1rem;
+    text-align: center;
+}
+
+.image-column img {
+    margin: auto;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.image-column .post-text {
+    text-align: center;
+    width: 100%;
+    margin: auto;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    width: fit-content;
+    margin: 3rem auto;
+    background-color: rgb(77, 6, 147);
+    padding: 0.2em 0.5em;        
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+/* Spacing Utilities */
+.between-posts {
+    margin: 4rem 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .two-column {
+        flex-direction: column;
+        padding: 0;
+    }
+
+    .image-column {
+        order: -1;
+    }
+
+    .text-column,
+    .image-column {
+        width: 100%;
+        padding: 0;
+    }
+}
