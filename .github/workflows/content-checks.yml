@@ -1,0 +1,85 @@
+name: Content Checks and Fixes
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      cache-hit: ${{ steps.cache.outputs.cache-hit }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        id: cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+  content-checks:
+    needs: setup
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Fix HTML links
+        run: npm run fix-links
+        continue-on-error: true
+          
+      - name: Check markdown links
+        run: |
+          find . -name "*.md" -not -path "./node_modules/*" -not -path "./.git/*" | while read -r file; do
+            npx markdown-link-check "$file" -c .github/workflows/markdown-link-check-config.json || exit 1
+          done
+          
+      - name: Check grammar
+        run: |
+          find . -name "*.md" -not -path "./node_modules/*" -not -path "./.git/*" | while read -r file; do
+            npx write-good "$file" --no-passive --no-adverb --no-tooWordy --no-cliches || exit 1
+          done
+          
+      - name: Check HTML formatting
+        run: |
+          find . -name "*.html" -not -path "./node_modules/*" -not -path "./.git/*" | while read -r file; do
+            npx prettier --check --config .github/workflows/.prettierrc "$file" || exit 1
+          done
+          
+      - name: Lint HTML
+        run: |
+          find . -name "*.html" -not -path "./node_modules/*" -not -path "./.git/*" | while read -r file; do
+            npx html-validate --config .github/workflows/.htmlvalidate.json "$file" || exit 1
+          done
+          
+      - name: Commit changes
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add .
+          git commit -m "fix: update content and links" || exit 0
+          git push

@@ -1,0 +1,19 @@
+{
+  "name": "lololo",
+  "version": "1.0.0",
+  "description": "bt3gl's loyal love",
+  "type": "module",
+  "scripts": {
+    "fix-links": "node .github/workflows/fix-links.js"
+  },
+  "dependencies": {
+    "glob": "^10.3.10",
+    "cheerio": "^1.0.0-rc.12",
+    "prettier": "^3.2.5"
+  },
+  "devDependencies": {
+    "html-validate": "^8.1.0",
+    "markdown-link-check": "^3.12.0",
+    "write-good": "^1.0.8"
+  }
+} 
