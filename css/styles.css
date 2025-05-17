@@ -219,6 +219,25 @@ body > *:first-child {
     code {
         font-size: 0.9em;
     }
+
+    .image-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .image-row img {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+        margin: 0;
+    }
+
+    .image-10, .image-15, .image-20, .image-25, .image-30, .image-35, .image-40, .image-45, .image-50, .image-55 {
+        height: auto !important;
+        width: 100% !important;
+        max-width: 400px !important;
+    }
 }
 
 @media (max-width: 480px) {
