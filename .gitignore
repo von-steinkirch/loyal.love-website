@@ -5,3 +5,4 @@ npm-debug.log*
 *.swo
 *~
 next_post.html
+yarn.lock

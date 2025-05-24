@@ -68,6 +68,23 @@ body > *:first-child {
     }
 }
 
+.chapter-title {
+    text-align: center;
+    font-family: 'Calibri', sans-serif;
+    color: rgb(59, 58, 60);
+    font-size: 4em;
+    margin: 40px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: 2px;
+    font-weight: 900;
+    animation: fadeIn 1.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes titleShadow {
     0%, 100% {
         transform: translateY(0) scale(1);
@@ -117,7 +134,35 @@ body > *:first-child {
       background-position: 0% 50%;
     }
   }
-  
+
+.gradient-text-usa {
+    background: linear-gradient(45deg, 
+        #B22234, /* American Red */
+        #E63946, /* Lighter Red */
+        #3C3B6E, /* American Blue */
+        #1D3557  /* Deep Navy */
+    );
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradient 8s ease infinite;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(60, 59, 110, 0.3); /* Enhanced blue glow */
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
 @media (max-width: 768px) {
     body {
         padding: 1rem 1rem;
@@ -261,7 +306,7 @@ body > *:first-child {
 }
 
 .big-title {
-    font-size: 4.1rem;
+    font-size: 4.8rem;
     font-family: 'Courier New', Courier, monospace; 
     text-align: center;
     position: relative;
@@ -312,7 +357,7 @@ body > *:first-child {
 }
 
 .big-subtitle {
-    font-size: 1.0rem;
+    font-size: 1.2rem;
     font-style: bold;
     font-family: 'Courier New', Courier, monospace;
     margin: 0.5rem 0;
@@ -576,6 +621,26 @@ img {
     border-radius: 20px;
     transform: perspective(1000px) rotateX(-2deg);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards;
+}
+
+img[loading="lazy"] {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+img[loading="lazy"].loaded {
+    opacity: 1;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 img:hover {
@@ -1008,4 +1073,21 @@ h6.post-text::after {
 
 .nice-table td:hover {
     background: rgba(77, 6, 147, 0.05);
+}
+
+.image-0 {
+    filter: none !important;
+    transform: perspective(1000px) rotateX(-2deg);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards;
+    max-width: 40%;
+    height: auto;
+    margin: 2rem auto;
+}
+
+.image-0:hover {
+    filter: none !important;
+    transform: perspective(1000px) rotateX(0deg) translateY(-5px) scale(1.2);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
 }
