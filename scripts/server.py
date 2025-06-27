@@ -122,6 +122,7 @@ class EnhancedHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     self.send_header('Content-Length', str(len(data)))
                     self.send_header('Content-Encoding', 'gzip')
                     self.send_header('Last-Modified', mtime)
+                    self.end_headers()
                     return io.BytesIO(data)
                 except (OSError, IOError) as e:
                     self.send_error(500, f"❌ error reading file: {e}")
@@ -136,6 +137,7 @@ class EnhancedHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     self.send_header('Content-Length', str(len(compressed_data)))
                     self.send_header('Content-Encoding', 'gzip')
                     self.send_header('Last-Modified', mtime)
+                    self.end_headers()
                     return io.BytesIO(compressed_data)
                 except (OSError, IOError) as e:
                     self.send_error(500, f"❌ error reading file: {e}")
