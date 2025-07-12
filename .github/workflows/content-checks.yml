@@ -1,0 +1,109 @@
+name: 👾 content checks and fixes
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      cache-hit: ${{ steps.cache.outputs.cache-hit }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: ✅ setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: ✅ cache dependencies
+        uses: actions/cache@v3
+        id: cache
+        with:
+          path: |
+            node_modules
+            ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: ✅ install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+  content-checks:
+    needs: setup
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        check: ['links', 'grammar', 'formatting', 'linting']
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: ✅ setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: ✅ install dependencies
+        run: npm install
+
+      - name: ✅ fix html links
+        if: matrix.check == 'links'
+        run: |
+          node scripts/fix_links.js || {
+            echo "::error::failed to fix HTML links"
+            exit 1
+          }
+          
+      - name: ✅ check markdown links
+        if: matrix.check == 'links'
+        run: |
+          find . -name "*.md" -not -path "./node_modules/*" -not -path "./.git/*" | while read -r file; do
+            echo "checking links in $file"
+            npx markdown-link-check "$file" -c .github/workflows/.markdown-link-check-config.json || {
+              echo "::error::failed to check links in $file"
+              exit 1
+            }
+          done
+          
+      - name: ✅ check grammar
+        if: matrix.check == 'grammar'
+        run: |
+          find . -name "*.md" -not -path "./node_modules/*" -not -path "./.git/*" | while read -r file; do
+            echo "checking grammar in $file"
+            npx write-good "$file" --no-passive --no-adverb --no-tooWordy --no-cliches || {
+              echo "::error::failed to check grammar in $file"
+              exit 1
+            }
+          done
+          
+      - name: ✅ check html formatting
+        if: matrix.check == 'formatting'
+        run: |
+          find . -name "*.html" -not -path "./node_modules/*" -not -path "./.git/*" | while read -r file; do
+            echo "checking formatting in $file"
+            npx prettier --check --config .github/workflows/.prettierrc.json "$file" || {
+              echo "::error::failed to check formatting in $file"
+              exit 1
+            }
+          done
+          
+      - name: ✅ lint html
+        if: matrix.check == 'linting'
+        run: |
+          find . -name "*.html" -not -path "./node_modules/*" -not -path "./.git/*" | while read -r file; do
+            echo "linting $file"
+            npx html-validate --config .github/workflows/.htmlvalidate.json "$file" || {
+              echo "::error::failed to lint $file"
+              exit 1
+            }
+          done

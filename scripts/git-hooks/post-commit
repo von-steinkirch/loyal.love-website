@@ -1,0 +1,41 @@
+#!/bin/bash
+set -euo pipefail
+
+# Source helper functions
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+source "${SCRIPT_DIR}/../generate_rss.sh"
+
+cd "$REPO_ROOT" || {
+    log "❌ failed to change to repository root"
+    exit 1
+}
+
+log "👾 post-commit hook generating rss feed..."
+if ! python3 -m pip install -r requirements.txt; then
+    log "❌ failed to install requirements"
+    exit 1
+fi
+
+if ! generate_rss; then
+    log "❌ failed to generate rss feed"
+    exit 1
+fi
+
+if git diff --quiet rss.xml; then
+    log "👾 no changes to rss feed"
+else
+    log "👾 rss feed updated. committing changes..."
+    if ! git add rss.xml; then
+        log "❌ failed to stage rss.xml"
+        exit 1
+    fi
+
+    if ! git commit -m "chore: update rss feed" --no-verify; then
+        log "❌ failed to commit rss feed changes"
+        exit 1
+    fi
+    log "👾 rss feed changes committed"
+fi
+
+success "✅ post-commit hook completed at $(date)"

@@ -1,0 +1,17 @@
+{
+  "name": "lololo",
+  "version": "0.0.1",
+  "description": "bt3gl's loyal.love.lore",
+  "type": "module",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "feedparser": "^2.2.10",
+    "glob": "^10.4.5",
+    "prettier": "^3.5.3"
+  },
+  "devDependencies": {
+    "html-validate": "^8.1.0",
+    "markdown-link-check": "^3.12.0",
+    "write-good": "^1.0.8"
+  }
+}
